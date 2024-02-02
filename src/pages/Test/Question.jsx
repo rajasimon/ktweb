@@ -53,7 +53,7 @@ const Question = ({currentQuestion, setShowImage, setShowImageContent, handleAns
           <p className="text-[#A4A4A4] font-semibold">Select only one correct answer</p>
         </div>
         <div className="w-3/12">
-          <img src={imageDataURL} alt="" onClick={handleImageClick} />
+          <img src={imageDataURL} alt="" onClick={handleImageClick} style={{width: "408px", height: "229px"}} />
           <p className="text-[#A4A4A4] font-bold text-lg text-center">Click on image to zoom</p>
         </div>
       </div>

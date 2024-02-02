@@ -86,7 +86,7 @@ const Test = () => {
 
   const handleSubmitAllAnswers = async () => {
     apInstance.current.stop()
-    const getReport = await apInstance.current.getReport({})
+    const getReport = await apInstance.current.getReport()
     localStorage.setItem('AutoProctorReport', JSON.stringify(getReport))
     
     const endStudentExamResp = await endStudentExamAPI(token, examDetail.id, userName)
