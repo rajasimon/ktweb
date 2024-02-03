@@ -43,8 +43,10 @@ const Result = () => {
   const [testDate, setTestDate] = useState(null)
   const [duration, setDuration] = useState(null)
   const [deviceType, setDeviceType] = useState(null)
+  const [trustScore, setTrustScore] = useState(null)
   const [violationDetected, setViolationDetected] = useState(0)
   const [faceViolation, setFaceViolation] = useState(0)
+  const [noiseViolation, setNoiseViolation] = useState(0)
   const [tabSwitched, setTabSwitched] = useState(0)
 
   const {token, login, logout, userID, userName } = useAuth()
@@ -64,12 +66,25 @@ const Result = () => {
     const minutes = Math.floor(timeDifference / (1000 * 60));
     const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
+    
     setTestDate(startDate.toDateString())
     setDuration(`${minutes}m: ${seconds}`)
-
+    
     // Process AutoProctor Report
+    setTrustScore(autoProctorReport.attemptDetails.trustScore * 100)
     setDeviceType(autoProctorReport.attemptDetails.device)
+    setViolationDetected(autoProctorReport.reportData.all_evidences.length)
 
+    if (autoProctorReport.reportData.all_evidences.length > 0) {
+      for (const evidence in autoProctorReport.reportData.all_evidences) {
+        const evidenceReport = autoProctorReport.reportData.all_evidences[evidence]
+        if (evidenceReport) {
+          if (evidenceReport.label === "noise-detected") {
+            setNoiseViolation(noiseViolation + 1)
+          }
+        }
+      }
+    }
   }, [])
 
   return (
@@ -108,6 +123,14 @@ const Result = () => {
                   <div className="flex relative">
                     <CircleSVG />
                     <div className="absolute">
+                      <div className="absolute inset-8 flex flex-col items-center justify-center">
+                        <div className="font-bold text-2xl text-green-800">
+                          80%
+                        </div>
+                        <div className="font-bold text-2xl text-green-800">
+                          Passed
+                        </div>
+                      </div>
                       <ProgressSVG />
                     </div>
                   </div>
@@ -123,13 +146,21 @@ const Result = () => {
                   <div className="flex relative">
                     <CircleSVG />
                     <div className="absolute">
+                      <div className="absolute inset-8 flex flex-col items-center justify-center">
+                        <div className="font-bold text-2xl text-green-800">
+                          {trustScore}
+                        </div>
+                        <div className="font-bold text-2xl text-green-800">
+                          Trust
+                        </div>
+                      </div>
                       <ProgressSVG />
                     </div>
                   </div>
                   <div className="py-8 space-y-4">
-                    <p className="text-xl"><span className="font-bold">05</span> Violations Detected</p>
+                    <p className="text-xl"><span className="font-bold">{violationDetected}</span> Violations Detected</p>
                     <p className="text-xl">Face Violation: <span className="font-bold">2 times</span></p>
-                    <p className="text-xl">Noise Violation: <span className="font-bold">3 times</span></p>
+                    <p className="text-xl">Noise Violation: <span className="font-bold">{noiseViolation} times</span></p>
                     <p className="text-xl">Tab Switched: <span className="font-bold">0 times</span></p>
                     <p className="text-xl">Tracking </p>
                   </div>

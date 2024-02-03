@@ -8,11 +8,13 @@ import Button  from "../../components/Button"
 
 import Instructions from "./instructions"
 import Question from "./Question"
+import Timer from "./Timer"
 import {getCredentials} from "./utils"
 import { useAuth } from "../../auth"
 
 import {questionSetupsAPI, startExamAPI, updateQuestion, endStudentExamAPI} from "./api"
 import { useNavigate } from "react-router-dom"
+import Violation from "./Violation"
 
 
 const Test = () => {
@@ -22,6 +24,8 @@ const Test = () => {
   const apInstance = useRef(null);
   const navigate = useNavigate()
   const [showImage, setShowImage] = useState(false)
+  const [showViolation, setShowViolation] = useState(false)
+  const [violationCode, setViolationCode] = useState(null)
   const [showImageContent, setShowImageContent] = useState(false)
   const [testMode, setTestMode] = useState('instructions')
   
@@ -36,30 +40,6 @@ const Test = () => {
   const handleAnswerSelected = (selectedAnswer) => {
     setSelectedAnswerID(selectedAnswer)
   };
-
-  const initialTime = 60 * 60;
-  const [time, setTime] = useState(initialTime);
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes} : ${remainingSeconds}`;
-  };
-  
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setTime((prevTime) => {
-        if (prevTime > 0) {
-          return prevTime - 1;
-        } else {
-          clearInterval(intervalId);
-          // You can perform additional actions when the countdown reaches zero
-          return 0;
-        }
-      });
-    }, 1000);
-
-    return () => clearInterval(intervalId);
-  }, []); // Empty dependency array to run the effect only once on component mount
 
   
   const handleNextClick = () => {
@@ -86,14 +66,17 @@ const Test = () => {
 
   const handleSubmitAllAnswers = async () => {
     apInstance.current.stop()
-    const getReport = await apInstance.current.getReport()
-    localStorage.setItem('AutoProctorReport', JSON.stringify(getReport))
     
     const endStudentExamResp = await endStudentExamAPI(token, examDetail.id, userName)
     localStorage.setItem('KTReport', JSON.stringify(endStudentExamResp))
-
-    navigate("/result")
   }
+
+  window.addEventListener("apMonitoringStopped", async () => {
+      const reportOptions = getReportOptions();
+      apInstance.showReport(reportOptions);
+      document.getElementById("ap-proctoring-container").visibility = "hidden";
+      document.getElementById("ap-test-proctoring-status").innerHTML = "Proctoring stopped";
+  })
 
   const currentQuestion = questionBank[currentQuestionIndex];
 
@@ -168,7 +151,14 @@ const Test = () => {
 
 
   const handleAutoProctorEvidenceEvent = (event) => {
-    console.log('Event received from auto proctor evidence event')
+    console.log('Event received from auto proctor evidence event', event)
+    const evidenceCode = event.detail.evidenceCode
+    setViolationCode(evidenceCode)
+    setShowViolation(true)
+  }
+
+  const hanldeViolationAccept = () => {
+    setShowViolation(false)
   }
 
   const handleAutoProctorMonitoringStarted = async (event) => {
@@ -179,6 +169,13 @@ const Test = () => {
     const questionsetups = await questionSetupsAPI(token, examDetail.id)
     setQuestionBank(questionsetups)
     setTestMode("questions")
+  }
+
+  const handleAutoProctorMonitoringStopped = async () => {
+    const getReport = await apInstance.current.getReport()
+    localStorage.setItem('AutoProctorReport', JSON.stringify(getReport))
+    
+    navigate("/result")
   }
   
 
@@ -197,6 +194,13 @@ const Test = () => {
     }
   }, [handleAutoProctorMonitoringStarted])
 
+  useEffect(() => {
+    window.addEventListener("apMonitoringStopped", handleAutoProctorMonitoringStopped)
+    return () => {
+      window.removeEventListener("apMonitoringStopped", handleAutoProctorMonitoringStopped)
+    }
+  })
+
 
   return (
     <div className="h-screen bg-[#F1F1F8]">
@@ -205,6 +209,15 @@ const Test = () => {
           <div className="w-full h-full top-0 bg-[#00000080] backdrop-opacity-30 fixed"></div>
           <div className="fixed z-50 w-full flex p-16 h-full justify-center items-center" onClick={() => setShowImage(false)}>
             <img src={showImageContent} alt="" className="w-7/12 h-fit" />
+          </div>
+        </div>
+      )}
+
+      {showViolation && (
+        <div>
+          <div className="w-full h-full top-0 bg-[#00000080] backdrop-opacity-30 fixed"></div>
+          <div className="fixed z-50 w-full flex p-16 h-full justify-center items-center" onClick={() => setShowImage(false)}>
+            <Violation violationCode={violationCode} onAcceptViolation={hanldeViolationAccept} />
           </div>
         </div>
       )}
@@ -246,7 +259,7 @@ const Test = () => {
                   <div className="h-12 w-1 bg-gray-200"></div>
                   <div className="pl-6">
                     <p className="text-gray-500">Time Left</p>
-                    <p className="text-3xl font-semibold text-sky-700">{formatTime(time)}</p>
+                    <Timer handleSubmitAllAnswers={handleSubmitAllAnswers} />
                   </div>
                 </div>
               )}
