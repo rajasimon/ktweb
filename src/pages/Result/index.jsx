@@ -90,27 +90,30 @@ const Result = () => {
     let totalCount = 0
     if (autoProctorReport.reportData.all_evidences.length > 0) {
       autoProctorReport.reportData.all_evidences.forEach(evidenceReport => {
-        console.log(evidenceReport)
-        if (evidenceReport.hasOwnProperty("label")) {
-          switch (evidenceReport.label) {
-            case "noise-detected":
-              noiseCount++
-              totalCount++
-              break;
-            case "tab-switch":
-              tabCount++ 
-              totalCount++
-              break;
-            case "no-face-looking-at-camera":
-              faceCount++ 
-              totalCount++
-              break;
-            case "multiple-faces-detected":
-              faceCount++
-              totalCount++
-              break;
-            default:
-              break;
+        
+        if (!Array.isArray(evidenceReport)) {
+          console.log(evidenceReport)
+          if (evidenceReport) {
+            switch (evidenceReport.label) {
+              case "noise-detected":
+                noiseCount++
+                totalCount++
+                break;
+              case "tab-switch":
+                tabCount++ 
+                totalCount++
+                break;
+              case "no-face-looking-at-camera":
+                faceCount++ 
+                totalCount++
+                break;
+              case "multiple-faces-detected":
+                faceCount++
+                totalCount++
+                break;
+              default:
+                break;
+            }
           }
         }
       });
@@ -192,7 +195,7 @@ const Result = () => {
                     <div className="absolute">
                       <div className="absolute flex flex-col items-center justify-center" style={{width: "201px", height: "200px"}}>
                         <div className="font-bold text-2xl text-green-800 text-center" style={{color: resultStatus === "PASSED" ? "#025EE1" : "#B70101"}}>
-                          {Math.floor(trustScore)}
+                          {Math.floor(trustScore)}%
                         </div>
                         <div className="font-bold text-2xl text-green-800 text-center" style={{color: resultStatus === "PASSED" ? "#025EE1" : "#B70101"}}>
                           Trust
