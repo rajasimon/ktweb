@@ -135,7 +135,7 @@ const Result = () => {
           <div className="flex w-full">
             <img src="/src/assets/avatar.svg" alt="" />
             <p className="flex items-center pl-3 text-2xl font-semibold">
-              {userName}
+              Welcome
             </p>
           </div>
           <div><img src="/src/assets/EDC_Icon.png" alt="" /></div>

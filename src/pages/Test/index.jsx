@@ -228,7 +228,7 @@ const Test = () => {
         <div className="flex pt-12 justify-between mb-5">
           <div className="flex w-full">
             <img src={avatar} alt="" />
-            <p className="flex items-center pl-3 text-2xl font-semibold">{userName}</p>
+            <p className="flex items-center pl-3 text-2xl font-semibold">Welcome</p>
           </div>
           <div>
             <img src={edcIcon} alt="" />
