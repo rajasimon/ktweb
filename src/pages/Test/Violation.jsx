@@ -10,7 +10,7 @@ const Violation = ({onAcceptViolation, violationCode}) => {
   let violationMessage = ""
 
   const combinedClassNames = classNames(
-    "flex", "w-4/12", "w-fit", "p-6", "bg-gradient-to-r", gradiantFrom, gradiantTo, "gap-6", "rounded-xl"
+    "flex", "w-4/12", "p-6", "bg-gradient-to-r", gradiantFrom, gradiantTo, "gap-6", "rounded-xl"
   )
 
 

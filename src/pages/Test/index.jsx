@@ -153,8 +153,10 @@ const Test = () => {
   const handleAutoProctorEvidenceEvent = (event) => {
     console.log('Event received from auto proctor evidence event', event)
     const evidenceCode = event.detail.evidenceCode
-    setViolationCode(evidenceCode)
-    setShowViolation(true)
+    if (evidenceCode === 5008) {
+      setViolationCode(evidenceCode)
+      setShowViolation(true)
+    }
   }
 
   const hanldeViolationAccept = () => {
