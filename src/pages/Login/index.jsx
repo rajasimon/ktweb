@@ -8,7 +8,7 @@ import loginImage from "../../assets/login.png"
 import edcIcon from "../../assets/EDC_Icon.png"
 import Ellipse from "../../assets/Ellipse.png"
 import EllipseWhiteFace from "../../assets/Ellipse_white_face.png"
-import face from "../../assets/face.svg"
+import faceSVG from "../../assets/face.svg"
 import danger from "../../assets/danger.svg"
 
 import { Face } from "./face"
@@ -54,7 +54,7 @@ const Login = () => {
     <div>
       <Input placeHolder={placeHolder} onChange={handleInputOnChange}  />
       <div className="mt-10 mb-20">
-        <Alert icon={face} title="Data Privacy Notice" subtitle="Our system authenticate using facial recognition. By using this system, you acknowledge that all captured data is subject to the EDC privacy policy and terms." />
+        <Alert icon={faceSVG} title="Data Privacy Notice" subtitle="Our system authenticate using facial recognition. By using this system, you acknowledge that all captured data is subject to the EDC privacy policy and terms." />
       </div>
       <Button title="Confirm and Proceed" isFull={true} onClick={handleInputClick} />
     </div>

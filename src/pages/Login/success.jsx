@@ -1,7 +1,7 @@
 
 
 import { useNavigate } from "react-router-dom"
-import EllipseWhiteFace from "../../assets/Ellipse_white_face.png"
+import authenticationSuccessfulGIF from "../../assets/images/AuthenticationSuccessful.gif"
 import { useEffect } from "react"
 import { useAuth } from "../../auth"
 
@@ -31,7 +31,7 @@ export const Success = ({typeInput, name}) => {
       const response = await authenticateAPI()
       if ("id_token" in response) {
         login(response.id_token, typeInput, name)
-        setTimeout(() => {console.log("token found"), 2000})
+        setTimeout(() => {console.log("token found"), 4000})
         navigate("/test")
 
       } else {
@@ -47,7 +47,7 @@ export const Success = ({typeInput, name}) => {
   return (
     <div className="flex flex-col items-center space-y-6">
       <p className="text-2xl font-bold text-[#00B154]" style={{ textShadow: '0px 0px 8px rgba(0, 0, 0, 0.25)'}}>AUTHENTICATION SUCCEEDED</p>
-      <img src={EllipseWhiteFace} alt="" />
+      <img src={authenticationSuccessfulGIF} alt="" />
     </div>
   )
 }
