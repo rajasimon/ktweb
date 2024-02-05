@@ -10,7 +10,7 @@ export const Camera = ({setMode}) => {
         const getTracks = stream.getTracks();
         getTracks.forEach((tracks) => {
           if (tracks.kind === "video") {
-            setMode("success")
+            setMode("face")
           }
         })
       }, 

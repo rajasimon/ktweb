@@ -6,6 +6,7 @@ import './index.css'
 import Login from './pages/Login/index.jsx'
 import Test from './pages/Test/index.jsx'
 import Result from './pages/Result/index.jsx'
+import Logout from './pages/Logout/index.jsx'
 
 import { AuthProvider } from './auth.jsx'
 
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: "/result",
     element: <Result />
+  },
+  {
+    path: "/logout",
+    element: <Logout />
   }
 ])
 
