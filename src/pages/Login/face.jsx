@@ -27,7 +27,7 @@ export const Face = ({ setMode, setName }) => {
   const facialAPI = async (blob) => {
     const formData = new FormData()
     formData.append('file', blob, 'face.jpg');
-    const response = await fetch(`https://www.itrytools.com:8000/api/v1/recognition/recognize`, {
+    const response = await fetch(`https://face.olivedev.xyz/api/v1/recognition/recognize`, {
       method: 'POST',
       headers: {
         'x-api-key': 'd38985c8-6d07-4c18-a109-e07de7c6c625'
