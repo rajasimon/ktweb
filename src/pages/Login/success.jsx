@@ -1,46 +1,17 @@
 
 
 import { useNavigate } from "react-router-dom"
-import authenticationSuccessfulGIF from "../../assets/images/AuthenticationSuccessful.gif"
 import { useEffect } from "react"
-import { useAuth } from "../../auth"
+import authenticationSuccessfulGIF from "../../assets/images/AuthenticationSuccessful.gif"
 
 
-export const Success = ({typeInput, name}) => {
-  // Uncomment below when cors issue is fixed
-  // const backendPath = "http://localhost:5000"
-  const backendPath = import.meta.env.VITE_BACKEND_PATH
+export const Success = () => {
   
   const navigate = useNavigate()
-  const { token, login, logout } = useAuth()
-
-  const authenticateAPI = async () => (
-    fetch(`${backendPath}/api/authenticate`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({"password": "admin", "username": typeInput})
-    }).then((res) => res.json()).then(response => {
-      return response
-    })
-  )
 
   useEffect(() => {
-    const authenticateTheUser = async () => {
-      const response = await authenticateAPI()
-      if ("id_token" in response) {
-        login(response.id_token, typeInput, name)
-        setTimeout(() => {console.log("token found"), 4000})
-        navigate("/test")
-
-      } else {
-        setMode("fail")
-        console.log("Face matched but the API call failed.")
-      }
-    }
-    authenticateTheUser()
-
+    setTimeout(() => {console.log("Successfull authentication redirect to test"), 4000})
+    navigate("/test")
   }, [])
 
 

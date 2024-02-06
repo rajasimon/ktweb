@@ -6,8 +6,11 @@ import FaceAnimation from "../../assets/faceanimation.gif"
 import { useAuth } from "../../auth"
 
 
-export const Face = ({ setMode, setName }) => {
+export const Face = ({ setMode, setName, typeInput }) => {
   const [showAnimation, setShowAnimation] = useState(false);
+
+  const backendPath = import.meta.env.VITE_BACKEND_PATH
+  const { token, login, logout } = useAuth()
 
   const convertFrameToBlob = async (video) => {
     const canvas = document.createElement('canvas');
@@ -24,9 +27,10 @@ export const Face = ({ setMode, setName }) => {
     });
   };
 
-  const facialAPI = async (blob) => {
+  const facialAPI = async (blob, typeInput) => {
     const formData = new FormData()
     formData.append('file', blob, 'face.jpg');
+    formData.append('studentID', typeInput)
     const response = await fetch(`https://face.olivedev.xyz/api/v1/recognition/recognize`, {
       method: 'POST',
       headers: {
@@ -36,6 +40,18 @@ export const Face = ({ setMode, setName }) => {
     });
     return await response.json();
   }
+
+  const authenticateAPI = async () => (
+    fetch(`${backendPath}/api/authenticate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({"password": "admin", "username": typeInput})
+    }).then((res) => res.json()).then(response => {
+      return response
+    })
+  )
 
 
   
@@ -58,29 +74,41 @@ export const Face = ({ setMode, setName }) => {
                 video.play();
                 const blob = await convertFrameToBlob(video)
                 console.log(blob)
-                const facialAPIResponse = await facialAPI(blob)
 
-                if ("code" in facialAPIResponse) {
-                  console.log(facialAPIResponse.message)
+                // Also call authentication API here.
+                const response = await authenticateAPI()
+                if ("id_token" in response) {
+                  login(response.id_token, typeInput, typeInput)
+                  const facialAPIResponse = await facialAPI(blob, typeInput)
+
+                  if ("code" in facialAPIResponse) {
+                    console.log(facialAPIResponse.message)
+                    setMode("fail")
+                  }
+  
+                  // Show pass/fail screen based on the data provided by the facial API
+                  facialAPIResponse.result.forEach(async (result) => {
+                    result.subjects.forEach(async (subject) => {
+                      const name = subject.subject
+                      const similarity = subject.similarity
+  
+                      if (similarity * 100 > 45) {
+                        // This is passed state.
+                        setMode("success")
+                        setName(name)
+                      } else {
+                        setMode("fail")
+                        console.log("Face found but similarity is not there.")
+                      }
+                    })
+                  })
+
+          
+                } else {
                   setMode("fail")
+                  console.log("Face matched but the API call failed.")
                 }
 
-                // Show pass/fail screen based on the data provided by the facial API
-                facialAPIResponse.result.forEach(async (result) => {
-                  result.subjects.forEach(async (subject) => {
-                    const name = subject.subject
-                    const similarity = subject.similarity
-
-                    if (similarity * 100 > 45) {
-                      // This is passed state.
-                      setMode("success")
-                      setName(name)
-                    } else {
-                      setMode("fail")
-                      console.log("Face found but similarity is not there.")
-                    }
-                  })
-                })
               });
 
             }
