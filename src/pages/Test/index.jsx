@@ -13,7 +13,7 @@ import {getCredentials} from "./utils"
 import { useAuth } from "../../auth"
 
 import {questionSetupsAPI, startExamAPI, updateQuestion, endStudentExamAPI} from "./api"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Violation from "./Violation"
 
 
@@ -30,6 +30,8 @@ const Test = () => {
   const [testMode, setTestMode] = useState('instructions')
   
   const [isProctor, setIsProctor] = useState(false)
+  const [isAccepted, setIsAccepted] = useState(false)
+  const [showAcceptButton, setShowAcceptButton] = useState(false)
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswerID, setSelectedAnswerID] = useState(0);
@@ -203,9 +205,8 @@ const Test = () => {
     }
   })
 
-
   return (
-    <div className="h-screen bg-[#F1F1F8]">
+    <div className="bg-[#F1F1F8]">
       {showImage && (
         <div>
           <div className="w-full h-full top-0 bg-[#00000080] backdrop-opacity-30 fixed"></div>
@@ -224,18 +225,18 @@ const Test = () => {
         </div>
       )}
       
-      <div className="px-24 h-screen">
+      <div className="px-24 sm:h-fit md:h-full lg:h-screen xl:h-screen max-xl:h-screen">
         <div className="flex pt-12 justify-between mb-5">
           <div className="flex w-full">
             <img src={avatar} alt="" />
-            <p className="flex items-center pl-3 text-2xl font-semibold">Welcome</p>
+            <p className="flex items-center pl-3 text-2xl font-semibold">{userName} <Link to={"/logout"} className="underline text-sm ml-10">Logout</Link></p>
           </div>
           <div>
             <img src={edcIcon} alt="" />
           </div>
         </div>
 
-        <div className="w-full h-4/5 bg-white rounded-t-2xl rounded-b-2xl">
+        <div className="w-full h-4/5 bg-white rounded-t-2xl rounded-b-2xl border-2 shadow-md">
           <div className="py-6 px-12 bg-[#F5F5F5] rounded-t-2xl flex">
             <div className="w-3/12">
               <p className="text-gray-400 font-semibold">Switch Language</p>
@@ -268,7 +269,7 @@ const Test = () => {
             </div>
           </div>
 
-          {testMode === "instructions" && <Instructions />}
+          {testMode === "instructions" && <Instructions showAcceptButton={showAcceptButton} isAccepted={isAccepted} setIsAccepted={setIsAccepted} />}
           {testMode === "questions" && <Question
             handleAnswerSelected={handleAnswerSelected} 
             currentQuestion={currentQuestion} 
@@ -277,7 +278,7 @@ const Test = () => {
 
           {testMode === "instructions" && (
             <div className="py-6 px-12 bg-[#F5F5F5] rounded-b-2xl">
-              <Button title="Confirm and Continue" onClick={() => setupAutoPrctor()} />
+              <Button title="Confirm and Continue" onClick={() => isAccepted ? setupAutoPrctor() : setShowAcceptButton(true)} />
             </div>
           )}
 
@@ -296,7 +297,7 @@ const Test = () => {
           )}
 
         </div>
-        <div className="fixed bottom-0 mb-3 ml-11">
+        <div className="mt-10 mb-3 ml-11">
           <p className="text-[#CCC]">Copyright © 2024 Performise Labs, all rights reserved</p>
         </div>
 

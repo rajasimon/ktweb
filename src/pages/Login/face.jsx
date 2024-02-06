@@ -12,6 +12,8 @@ export const Face = ({ setMode, setName, typeInput }) => {
   const backendPath = import.meta.env.VITE_BACKEND_PATH
   const { token, login, logout } = useAuth()
 
+  const videoPlayerRef = useRef()
+
   const convertFrameToBlob = async (video) => {
     const canvas = document.createElement('canvas');
     canvas.width = video.videoWidth;
@@ -71,7 +73,12 @@ export const Face = ({ setMode, setName, typeInput }) => {
               video.srcObject = stream;
 
               video.addEventListener("loadedmetadata", async () => {
-                video.play();
+                videoPlayerRef.current.srcObject = stream
+                videoPlayerRef.current.play();
+
+                // Wait for another 2 seconds
+                setTimeout(() => console.log("waiting for 2 seconds to load the vide"), 2000)
+                
                 const blob = await convertFrameToBlob(video)
                 console.log(blob)
 
@@ -129,7 +136,7 @@ export const Face = ({ setMode, setName, typeInput }) => {
       <p className="text-2xl font-bold text-[#025EE1]" style={{ textShadow: '0px 0px 8px rgba(0, 0, 0, 0.25)'}}>PLEASE LOOK DIRECTLY AT THE CAMERA</p>
       <div className="relative flex flex-col">
         <img src={Ellipse} alt="" className="" />
-        {showAnimation && <img src={FaceAnimation} alt="" className="absolute rounded-full w-52 ml-4 mt-12" />}
+        {showAnimation && <video className="absolute w-full rounded-full" autoPlay ref={videoPlayerRef}></video>}
       </div>
     </div>
   )

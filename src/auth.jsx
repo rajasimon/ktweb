@@ -21,6 +21,8 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem('userToken');
     localStorage.removeItem('userID');
     localStorage.removeItem('userName');
+    localStorage.removeItem('KTReport');
+    localStorage.removeItem('AutoProctorReport');
   };
 
   return (
