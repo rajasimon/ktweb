@@ -86,7 +86,7 @@ export const Face = ({ setMode, setName, typeInput }) => {
           const username = email.split("@")[0]
           if (email === typeInput) {
             setName(name)
-            await authenticateAPI(username)
+            await authenticateAPI(username, name)
           } else {
             setMode("fail")
           }
@@ -94,16 +94,16 @@ export const Face = ({ setMode, setName, typeInput }) => {
       })
   }
 
-  const authenticateAPI = async (name) => (
+  const authenticateAPI = async (username, name) => (
     fetch(`${backendPath}/api/authenticate`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({"password": "admin", "username": name})
+      body: JSON.stringify({"password": "admin", "username": username})
     }).then((res) => res.json()).then(response => {
         if ("id_token" in response) {
-          login(response.id_token, typeInput, typeInput)
+          login(response.id_token, typeInput, name)
           setMode("success")
         } else {
           setMode("fail")
