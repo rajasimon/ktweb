@@ -80,12 +80,13 @@ export const Face = ({ setMode, setName, typeInput }) => {
       facialAPIResponse.result.forEach(async (result) => {
         result.subjects.forEach(async (subject) => {
           const subjectList = subject.subject.split(",")
+
           const email = subjectList[0]
           const name = subjectList[1]
-          console.log("email", email, typeInput)
+          const username = email.split("@")[0]
           if (email === typeInput) {
             setName(name)
-            await authenticateAPI()
+            await authenticateAPI(username)
           } else {
             setMode("fail")
           }
@@ -93,16 +94,17 @@ export const Face = ({ setMode, setName, typeInput }) => {
       })
   }
 
-  const authenticateAPI = async () => (
+  const authenticateAPI = async (name) => (
     fetch(`${backendPath}/api/authenticate`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({"password": "admin", "username": typeInput})
+      body: JSON.stringify({"password": "admin", "username": name})
     }).then((res) => res.json()).then(response => {
         if ("id_token" in response) {
           login(response.id_token, typeInput, typeInput)
+          setMode("success")
         } else {
           setMode("fail")
           console.log("Face matched but the API call failed.")
