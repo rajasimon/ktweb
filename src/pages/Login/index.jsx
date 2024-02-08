@@ -31,8 +31,10 @@ const Login = () => {
   
   const handleInputClick = () => {
     // input, face, success, fail, link, camera
-    if (mode === 'input') {
-      setMode('camera')
+    if (typeInput) {
+      if (mode === 'input') {
+        setMode('camera')
+      }
     }
   }
 
