@@ -11,7 +11,7 @@ const Instructions = ({showAcceptButton, isAccepted, setIsAccepted}) => {
   }, [showAcceptButton])
   
   return (
-    <div className="py-6 px-12 h-4/5 overflow-scroll overflow-x-hidden">
+    <div className="py-6 px-4 md:px-12 h-4/5 overflow-scroll overflow-x-hidden">
       <div className="prose max-w-none text-[#535353]">
         <h2>Integrity Guidelines</h2>
         <ul>

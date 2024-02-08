@@ -77,21 +77,20 @@ const Login = () => {
   const cameraMode = <Camera setMode={setMode} />
 
   return (
-    <div className="flex flex-row h-screen">
-      <div className="flex items-center justify-center w-3/5 bg-gradient-to-r from-[#025EE1] to-[#171C8F]">
+    <div className="flex flex-row h-screen bg-[#F1F1F8]">
+      <div className="items-center justify-center w-3/5 bg-gradient-to-r from-[#025EE1] to-[#171C8F] hidden md:block">
         <img src={loginImage} alt="" width="633" height="600" />
         <div className="absolute bottom-0">
           <p className="text-white py-4">Copyright © 2024 Performise Labs, all rights reserved</p>
         </div>
       </div>
-      <div className="px-16 py-6 flex flex-col items-center w-2/5">
-        
+      <div className="px-6 py-4 md:px-16 md:py-6 flex flex-col items-center w-full md:w-2/5">
         <div className="flex w-full justify-end">
           <img src={edcIcon} alt="" />
         </div>
-        <div className="mt-24 mb-24 w-full flex flex-col">
-          <p className="text-[#505050] text-2xl">Welcome to</p>
-          <p className="text-[#505050] text-4xl"><span className="font-bold">O</span>nline <span className="font-bold">K</span>nowledge <span className="font-bold">T</span>est</p>
+        <div className="flex flex-col mt-5 mb-5 md:mt-24 md:mb-24 w-full">
+          <p className="text-[#505050] text-xl md:text-2xl">Welcome to</p>
+          <p className="text-[#505050] text-2xl md:text-4xl"><span className="font-bold">O</span>nline <span className="font-bold">K</span>nowledge <span className="font-bold">T</span>est</p>
         </div>
         {mode === "input" && inputMode}
         {mode === "face" && faceMode}
@@ -99,6 +98,9 @@ const Login = () => {
         {mode === "fail" && failMode}
         {mode === "link" && linkMode}
         {mode === "camera" && cameraMode}
+        <div className="absolute bottom-0">
+          <p className="text-[#CCCCCC] py-4">Copyright © 2024 Performise Labs, all rights reserved</p>
+        </div>
       </div>
     </div>
   )

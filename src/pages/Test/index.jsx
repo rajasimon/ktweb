@@ -225,11 +225,11 @@ const Test = () => {
         </div>
       )}
       
-      <div className="px-24 sm:h-fit md:h-full lg:h-screen xl:h-screen max-xl:h-screen">
+      <div className="px-5 md:px-24 h-full md:h-screen">
         <div className="flex pt-12 justify-between mb-5">
           <div className="flex w-full">
             <img src={avatar} alt="" />
-            <p className="flex items-center pl-3 text-2xl font-semibold">{userName} <Link to={"/logout"} className="underline text-sm ml-10">Logout</Link></p>
+            <p className="flex items-center pl-3 text-2xl font-semibold">{userName}</p>
           </div>
           <div>
             <img src={edcIcon} alt="" />
@@ -237,16 +237,16 @@ const Test = () => {
         </div>
 
         <div className="w-full h-4/5 bg-white rounded-t-2xl rounded-b-2xl border-2 shadow-md">
-          <div className="py-6 px-12 bg-[#F5F5F5] rounded-t-2xl flex">
-            <div className="w-3/12">
+          <div className="py-6 px-4 md:px-12 bg-[#F5F5F5] rounded-t-2xl flex">
+            <div className="w-8/12 md:w-3/12">
               <p className="text-gray-400 font-semibold">Switch Language</p>
               <div className="flex flex-row space-x-2">
                 <img src={Arabic} alt="" height={16} width={32} />
                 <p>Arabic</p>
               </div>
             </div>
-            <div className="w-full">
-              {testMode === "instructions" && <p className="font-bold text-center text-3xl">Test Instructions</p>}
+            <div className="w-1/12 md:w-full invisible md:visible">
+              {testMode === "instructions" && <p className="font-bold text-center text-2xl md:text-3xl">Test Instructions</p>}
               {testMode === "questions" && (
                 <div className="z-10">
                   <p className="text-xl font-semibold">{currentQuestionIndex + 1}/{questionBank.length}</p>
@@ -256,7 +256,7 @@ const Test = () => {
                 </div>
               )}
             </div>
-            <div className="w-3/12">
+            <div className="invinsible md:visible w-6/12 md:w-3/12">
               {testMode === "questions" && (
                 <div className="flex flex-row justify-end">
                   <div className="h-12 w-1 bg-gray-200"></div>
@@ -277,13 +277,13 @@ const Test = () => {
             setShowImageContent={setShowImageContent} />}
 
           {testMode === "instructions" && (
-            <div className="py-6 px-12 bg-[#F5F5F5] rounded-b-2xl">
+            <div className="py-6 px-4 md:px-12 bg-[#F5F5F5] rounded-b-2xl">
               <Button title="Confirm and Continue" onClick={() => isAccepted ? setupAutoPrctor() : setShowAcceptButton(true)} />
             </div>
           )}
 
           {testMode === "questions" && (
-            <div className="py-6 px-12 bg-[#F5F5F5] rounded-b-2xl">
+            <div className="py-6 px-4 md:px-12 bg-[#F5F5F5] rounded-b-2xl flex">
               <button className="px-4 py-2 w-52 h-10 hover:bg-[#EDF4FD] hover:border-[#025EE1] text-gray-900 border-2 rounded-lg" onClick={handlePreviousClick}>Previous</button>
               {showSubmit && (
                 <button className="ml-10 px-4 py-2 w-52 h-10 bg-[#025EE1] hover:bg-[#332A7C] text-white rounded-lg" onClick={handleSubmitAllAnswers}>Submit All Answers</button>

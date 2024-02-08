@@ -129,20 +129,20 @@ const Result = () => {
   }, []);
 
   return (
-    <div className="h-screen bg-[#F1F1F8]">
-      <div className="px-24 h-screen">
+    <div className="h-full md:h-screen bg-[#F1F1F8]">
+      <div className="px-4 md:px-24 h-full md:h-screen">
         <div className="flex pt-12 justify-between mb-5">
           <div className="flex w-full">
             <img src="/src/assets/avatar.svg" alt="" />
             <p className="flex items-center pl-3 text-2xl font-semibold">
-              Welcome
+              {userName}
             </p>
           </div>
           <div><img src="/src/assets/EDC_Icon.png" alt="" /></div>
         </div>
-        <div className="w-full h-4/5 bg-white rounded-t-2xl rounded-b-2xl">
-          <div className="py-6 px-12 bg-[#F5F5F5] rounded-t-2xl flex">
-            <div className="w-3/12">
+        <div className="w-full h-4/5 bg-white rounded-t-2xl rounded-b-2xl border-2 shadow-md">
+          <div className="py-6 px-4 md:px-12 bg-[#F5F5F5] rounded-t-2xl flex">
+            <div className="w-8/12 md:w-3/12">
               <p className="text-gray-400 font-semibold">Switch Language</p>
               <div className="flex flex-row space-x-2">
                 <img src="/src/assets/language.svg" alt="" height="16" width="32" />
@@ -150,17 +150,17 @@ const Result = () => {
               </div>
             </div>
             <div className="grow">
-              <p className="font-bold text-center text-3xl">Test Result</p>
+              <p className="font-bold text-center text-xl md:text-3xl">Test Result</p>
             </div>
-            <div className="w-3/12"></div>
+            <div className="hidden md:block w-3/12"></div>
           </div>
           
-          <div className="py-6 px-12 h-4/5 overflow-scroll overflow-x-hidden">
+          <div className="py-6 px-4 md:px-12 h-4/5 overflow-scroll overflow-x-hidden">
             <p className="text-xl font-bold capitalize text-center">You have completed the test, here is your test result</p>
 
             <div className="w-full flex items-center justify-center">
-              <div className="flex flex-row py-9 w-8/12">
-                <div className="w-6/12 flex flex-col px-12 items-center">
+              <div className="flex flex-col md:flex-row py-9 w-full md:w-8/12">
+                <div className="w-full md:w-6/12 flex flex-col px-12 items-center">
                   <div className="flex relative">
                     <CircleSVG />
                     <div className="absolute">
@@ -189,7 +189,7 @@ const Result = () => {
                     </div>
                   </div>
                 </div>
-                <div className="w-6/12 flex flex-col px-12 items-center">
+                <div className="w-full md:w-6/12 flex flex-col px-12 items-center">
                   <div className="flex relative">
                     <CircleSVG />
                     <div className="absolute">
@@ -224,14 +224,12 @@ const Result = () => {
             </div>
             
           </div>
-          <div className="py-6 px-12 bg-[#F5F5F5] rounded-b-2xl">
-            <p className="text-center text-2xl"><span className="font-bold capitalize">THANK YOU</span> <span className="text-gray-800">and all the best in your driving license journey</span></p>
+          <div className="py-6 px-4 md:px-12 bg-[#F5F5F5] rounded-b-2xl">
+            <p className="text-center text-lg md:text-2xl"><span className="font-bold capitalize">THANK YOU</span> <span className="text-gray-800">and all the best in your driving license journey</span></p>
           </div>
         </div>
-        <div className="fixed bottom-0 mb-3 ml-11">
-          <p className="text-[#CCC]">
-            Copyright © 2024 Performise Labs, all rights reserved
-          </p>
+        <div className="mt-10 mb-3 ml-11">
+          <p className="text-[#CCCCCC]">Copyright © 2024 Performise Labs, all rights reserved</p>
         </div>
       </div>
     </div>

@@ -17,7 +17,7 @@ export const Alert = ({title, subtitle, icon, isDanger}) => {
 
   return (
     <div className={combinedClassNames}>
-      <div className="w-20">
+      <div className="w-36 md:w-20">
         <img src={icon} alt="" />
       </div>
       <div>
