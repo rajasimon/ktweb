@@ -87,7 +87,7 @@ const Login = () => {
         <div className="flex w-full justify-end">
           <img src={edcIcon} alt="" />
         </div>
-        <div className="mt-24 mb-24 w-3/4 flex flex-col">
+        <div className="mt-24 mb-24 w-full flex flex-col">
           <p className="text-[#505050] text-2xl">Welcome to</p>
           <p className="text-[#505050] text-4xl"><span className="font-bold">O</span>nline <span className="font-bold">K</span>nowledge <span className="font-bold">T</span>est</p>
         </div>

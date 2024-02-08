@@ -1,36 +1,24 @@
 import { useEffect, useRef, useState } from "react"
-import { useNavigate } from "react-router-dom"
 
-import Ellipse from "../../assets/Ellipse.png"
-import FaceAnimation from "../../assets/faceanimation.gif"
 import { useAuth } from "../../auth"
 
-
 export const Face = ({ setMode, setName, typeInput }) => {
-  const [pictureTaken, setPictureTaken] = useState(false);
-
   const backendPath = import.meta.env.VITE_BACKEND_PATH
+  
+  const [pictureTaken, setPictureTaken] = useState(false);
+  const [takePicture, setTakePicture] = useState(false) 
+  const [timeoutSeconds, setTimeoutSeconds] = useState(null);
+  const [dataURL, setDataURL] = useState(null);
+  const [showWarning, setShowWarning] = useState(true);
+  const [showLoading, setShowLoading] = useState(false)
+
+
   const { token, login, logout } = useAuth()
 
   const videoRef = useRef()
-  const photoRef = useRef()
+  const photoRef = useRef(null)
 
-  // const convertFrameToBlob = async (video) => {
-  //   const canvas = document.createElement('canvas');
-  //   canvas.width = video.videoWidth;
-  //   canvas.height = video.videoHeight;
-
-  //   const ctx = canvas.getContext('2d');
-  //   ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-
-  //   return new Promise((resolve) => {
-  //     canvas.toBlob(blob => {
-  //       resolve(blob);
-  //     }, 'image/jpeg', 1);
-  //   });
-  // };
-
-  const takepicture = async () => {
+  const handleTakePicture = async () => {
     const width = 640
     const height = 480
     
@@ -41,7 +29,8 @@ export const Face = ({ setMode, setName, typeInput }) => {
     const context = canvas.getContext("2d");
     context.drawImage(videoRef.current, 0, 0, width, height);
     const data = canvas.toDataURL("image/png");
-    photoRef.current.setAttribute("src", data);
+    setPictureTaken(true)
+    setDataURL(data)
 
     const convertFrameToBlob = async () => {
       return new Promise((resolve) => {
@@ -52,7 +41,6 @@ export const Face = ({ setMode, setName, typeInput }) => {
     }
     
     const blob = await convertFrameToBlob()
-    console.log(blob)
     facialAPI(blob, typeInput)
   }
 
@@ -116,17 +104,14 @@ export const Face = ({ setMode, setName, typeInput }) => {
   useEffect(() => {
     const enableCamera = async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({ video: {width: 640, height: 480} });
         videoRef.current.srcObject = stream;
         videoRef.current.play();
 
         videoRef.current.addEventListener("loadedmetadata", async () => {
           console.log("video is started playing")
           setTimeout(() => (
-            console.log("waiting for 5 seconds to load the video"),
-            takepicture(),
-            stream.getTracks().forEach(track => track.stop()),
-            setPictureTaken(true)
+            setTakePicture(true)
           ), 5000)
         })
       } catch (err) {
@@ -137,90 +122,52 @@ export const Face = ({ setMode, setName, typeInput }) => {
     enableCamera()
   }, [])
 
-  // useEffect(()=> {
-    
-  //   async function enableCamera() {
-  //     // Get Video and take the image call the facial API 
-  //     navigator.getUserMedia({video:{ width:133, height:157 }}, 
-  //       (stream) => {
-  //         setShowAnimation(true)
+  // Take picture from the video feed
+  useEffect(() => {
+    let timerId;
 
-  //         const getTracks = stream.getTracks();
-  //         getTracks.forEach(async (tracks) => {
-  //           if (tracks.kind === "video") {
+    if (takePicture) {
+      setShowWarning(false)
+      
+      // Start countdown
+      let secondsLeft = 5; // Change this value as needed
+      setTimeoutSeconds(secondsLeft);
+      timerId = setInterval(() => {
+        secondsLeft--;
+        setTimeoutSeconds(secondsLeft);
+        if (secondsLeft === 0) {
+          clearInterval(timerId);
+          setTakePicture(false);
+          setTimeoutSeconds(null);
+          handleTakePicture()
+        }
+      }, 1000);
+    }
 
-  //             const video = document.createElement("video");
-  //             video.srcObject = stream;
+    return () => clearInterval(timerId); // Cleanup on unmount or state change
+  }, [takePicture]);
 
-  //             setTimeout(() => console.log("waiting for 2 seconds to load the vide0"), 2000)
-
-  //             video.addEventListener("loadedmetadata", async () => {
-  //               videoRef.current.srcObject = stream
-  //               videoRef.current.play();
-
-  //               // Wait for another 2 seconds
-                
-  //               const blob = await convertFrameToBlob(video)
-  //               console.log(blob)
-
-  //               const facialAPIResponse = await facialAPI(blob, typeInput)
-
-  //               if ("code" in facialAPIResponse) {
-  //                 console.log(facialAPIResponse.message)
-  //                 // setMode("fail")
-  //               }
-
-  //               // Show pass/fail screen based on the data provided by the facial API
-  //               facialAPIResponse.result.forEach(async (result) => {
-  //                 result.subjects.forEach(async (subject) => {
-  //                   const name = subject.subject
-  //                   const similarity = subject.similarity
-
-  //                   if (similarity * 100 > 45) {
-  //                     // This is passed state.
-  //                     // setMode("success")
-  //                     // setName(name)
-  //                   } else {
-  //                     // setMode("fail")
-  //                     console.log("Face found but similarity is not there.")
-  //                   }
-  //                 })
-  //               })
-                
-  //               // // Also call authentication API here.
-  //               // const response = await authenticateAPI()
-  //               // if ("id_token" in response) {
-  //               //   login(response.id_token, typeInput, typeInput)
-
-          
-  //               // } else {
-  //               //   setMode("fail")
-  //               //   console.log("Face matched but the API call failed.")
-  //               // }
-
-  //             });
-
-  //           }
-  //         })
-  //           console.log('getTracks', getTracks)
-  //         }, 
-  //       (error) => {
-  //         console.log("Error accessing user media", error)
-  //       })
-  //     }
-
-  //   enableCamera()
-
-  // })
+  useEffect(() => {
+    if (dataURL) {
+      photoRef.current.setAttribute("src", dataURL);
+      setShowLoading(true)
+    }
+  }, [dataURL])
 
   return (
-    <div className="flex flex-col items-center space-y-6">
+    <div className="flex flex-col items-center space-y-6 w-full">
       <p className="text-2xl font-bold text-[#025EE1]" style={{ textShadow: '0px 0px 8px rgba(0, 0, 0, 0.25)'}}>PLEASE LOOK DIRECTLY AT THE CAMERA</p>
-      <div className="flex flex-col items-center">
-        {!pictureTaken && <video className="rounded-lg" autoPlay ref={videoRef}></video>}
-        <img className="rounded-lg" ref={photoRef} />
-        {!pictureTaken && <p>Taking picture in 5 seconds...</p>}
+      <div className="relative flex flex-col items-center p-10 border-2 border-dashed border-[#505050] rounded-lg w-11/12 h-96">
+        {!pictureTaken && (
+          <div className="w-full h-full overflow-hidden rounded-lg">
+            <video className="w-full h-full object-cover" autoPlay ref={videoRef}></video>
+          </div>
+        )}
+        {pictureTaken && <img className="rounded-lg w-full h-full object-cover" ref={photoRef} />}
       </div>
+      {timeoutSeconds && <p className="text-xl text-red-500">Taking picture in {timeoutSeconds} seconds...</p>}
+      {showWarning && <p className="text-xl text-red-500">Adjust your posture</p>}
+      {showLoading && <p className="text-xl text-green-500">Loading...</p>}
     </div>
   )
 }
