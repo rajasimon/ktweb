@@ -225,7 +225,7 @@ const Test = () => {
         </div>
       )}
       
-      <div className="px-5 md:px-24 h-full md:h-screen">
+      <div className="px-5 md:px-24 h-full">
         <div className="flex pt-12 justify-between mb-5">
           <div className="flex w-full">
             <img src={avatar} alt="" />
