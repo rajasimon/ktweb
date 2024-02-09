@@ -32,18 +32,25 @@ const CircleSVG = () => (
   </svg>
 )
 
-const ProgressSVG = ({ progressPercentage, resultStatus }) => {
+const ProgressSVG = ({ progressPercentage, gradientColor1, gradientColor2 }) => {
+  console.log("gradientColor1, gradientColor2", gradientColor1, gradientColor2);
   return (
     <div className="flex items-center justify-center">
       <svg className="transform -rotate-90 w-72 h-72" style={{marginLeft: "-45px", marginTop: "-44px"}}>
+        <defs>
+          <linearGradient id={`${gradientColor1}${gradientColor2}`} gradientTransform="rotate(90)">
+            <stop offset="0%" stopColor={gradientColor1} />
+            <stop offset="100%" stopColor={gradientColor2} />
+          </linearGradient>
+        </defs>
         <circle cx="145" cy="145" r="90" stroke="#F8F8F8" strokeWidth="20" fill="transparent" />
-        <circle cx="145" cy="145" r="90" stroke={resultStatus == "PASSED" ? "#F8F8F8" : "rgb(169, 0, 0)"} strokeWidth="20" fill="transparent"
+        <circle cx="145" cy="145" r="90" stroke={gradientColor1} stroke-linecap="round" strokeWidth="20" fill="transparent"
           strokeDasharray="565.714285714"
           strokeDashoffset={565.714285714 - progressPercentage / 100 * 565.714285714}
+          style={{ stroke: `url(#${gradientColor1}${gradientColor2})` }}
         />
       </svg>
     </div>
-
   )
 }
 
@@ -165,14 +172,18 @@ const Result = () => {
                     <CircleSVG />
                     <div className="absolute">
                       <div className="absolute flex flex-col items-center justify-center" style={{width: "201px", height: "200px"}}>
-                        <div className="font-bold text-2xl" style={{color: resultStatus === "PASSED" ? "rgb(22 101 52" : "#B70101"}}>
+                        <div className="font-bold text-2xl" style={{color: resultStatus === "PASSED" ? "#037847" : "#B70101"}}>
                           {Math.floor(resultPercentage)}%
                         </div>
-                        <div className="font-bold text-2xl" style={{color: resultStatus === "PASSED" ? "rgb(22 101 52" : "#B70101"}}>
+                        <div className="font-bold text-2xl" style={{color: resultStatus === "PASSED" ? "#037847" : "#B70101"}}>
                           {resultStatus}
                         </div>
                       </div>
-                      <ProgressSVG progressPercentage={resultPercentage} />
+                      <ProgressSVG 
+                        progressPercentage={resultPercentage} 
+                        gradientColor1={resultStatus === "PASSED" ? "#037847" : "#A90000"}
+                        gradientColor2={resultStatus === "PASSED" ? "#43D590" : "#FF0000"}
+                       />
                     </div>
                   </div>
                   <div className="py-8 space-y-4">
@@ -194,14 +205,18 @@ const Result = () => {
                     <CircleSVG />
                     <div className="absolute">
                       <div className="absolute flex flex-col items-center justify-center" style={{width: "201px", height: "200px"}}>
-                        <div className="font-bold text-2xl text-green-800 text-center" style={{color: resultStatus === "PASSED" ? "#025EE1" : "#B70101"}}>
+                        <div className="font-bold text-2xl text-green-800 text-center" style={{color: trustScore >= 75 ? "#004AB4" : "#B70101"}}>
                           {Math.floor(trustScore)}%
                         </div>
-                        <div className="font-bold text-2xl text-green-800 text-center" style={{color: resultStatus === "PASSED" ? "#025EE1" : "#B70101"}}>
+                        <div className="font-bold text-2xl text-green-800 text-center" style={{color: trustScore >= 75 ? "#004AB4" : "#B70101"}}>
                           Trust
                         </div>
                       </div>
-                      <ProgressSVG progressPercentage={trustScore} resultStatus={resultStatus} />
+                      <ProgressSVG 
+                        progressPercentage={trustScore} 
+                        gradientColor1={trustScore >= 75 ? "#004AB4" : "#A90000"}
+                        gradientColor2={trustScore >= 75 ? "#62A3FF" : "#FF0000"}
+                      />
                     </div>
                   </div>
                   <div className="py-8 space-y-4">
