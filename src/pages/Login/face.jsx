@@ -67,13 +67,11 @@ export const Face = ({ setMode, setName, typeInput }) => {
       // Show pass/fail screen based on the data provided by the facial API
       facialAPIResponse.result.forEach(async (result) => {
         result.subjects.forEach(async (subject) => {
-          const subjectList = subject.subject.split(",")
-
-          const email = subjectList[0]
-          const name = subjectList[1]
-          if (email === typeInput) {
+          if (subject.similarity * 100 > 75) {
+            const subjectList = subject.subject.split(",")
+            const name = subjectList[1]
             setName(name)
-            await authenticateAPI(email, name)
+            await authenticateAPI(name)
           } else {
             setMode("fail")
           }
@@ -81,16 +79,16 @@ export const Face = ({ setMode, setName, typeInput }) => {
       })
   }
 
-  const authenticateAPI = async (email, name) => (
+  const authenticateAPI = async (name) => (
     fetch(`${backendPath}/api/authenticate`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({"password": "admin", "username": email})
+      body: JSON.stringify({"password": "admin", "username": typeInput})
     }).then((res) => res.json()).then(response => {
         if ("id_token" in response) {
-          login(response.id_token, email, name)
+          login(response.id_token, typeInput, name)
           setMode("success")
         } else {
           setMode("fail")
