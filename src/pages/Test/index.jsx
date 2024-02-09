@@ -69,7 +69,7 @@ const Test = () => {
   const handleSubmitAllAnswers = async () => {
     apInstance.current.stop()
     
-    const endStudentExamResp = await endStudentExamAPI(token, examDetail.id, userName)
+    const endStudentExamResp = await endStudentExamAPI(token, examDetail.id, userID)
     localStorage.setItem('KTReport', JSON.stringify(endStudentExamResp))
   }
 

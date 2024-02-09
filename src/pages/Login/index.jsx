@@ -98,9 +98,6 @@ const Login = () => {
         {mode === "fail" && failMode}
         {mode === "link" && linkMode}
         {mode === "camera" && cameraMode}
-        <div className="absolute bottom-0">
-          <p className="text-[#CCCCCC] py-4">Copyright © 2024 Performise Labs, all rights reserved</p>
-        </div>
       </div>
     </div>
   )
