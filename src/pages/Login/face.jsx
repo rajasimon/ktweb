@@ -69,9 +69,19 @@ export const Face = ({ setMode, setName, typeInput }) => {
         result.subjects.forEach(async (subject) => {
           if (subject.similarity * 100 > 75) {
             const subjectList = subject.subject.split(",")
+            const email = subjectList[0]
             const name = subjectList[1]
-            setName(name)
-            await authenticateAPI(name)
+
+            const splittedEmail = email.split("@")
+            const identifyName = splittedEmail[0]
+
+            if (identifyName === typeInput) {
+              // success
+              setName(name)
+              await authenticateAPI(name)
+            } else {
+              setMode("fail")
+            }
           } else {
             setMode("fail")
           }
@@ -107,9 +117,7 @@ export const Face = ({ setMode, setName, typeInput }) => {
 
         videoRef.current.addEventListener("loadedmetadata", async () => {
           console.log("video is started playing")
-          setTimeout(() => (
-            setTakePicture(true)
-          ), 5000)
+          setTakePicture(true)
         })
       } catch (err) {
         console.log('Error occurred', err);
