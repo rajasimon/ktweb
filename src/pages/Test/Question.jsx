@@ -46,10 +46,10 @@ const Question = ({currentQuestion, setShowImage, setShowImageContent, handleAns
 
   return (
     <div className="py-6 px-4 md:px-12 h-4/5 flex flex-col">
-      <div className="h-64 flex">
+      <div className="h-auto md:h-64 flex">
         <div className="w-full md:w-9/12 space-y-4">
           <p className="text-[#A4A4A4] font-semibold">Question: {currentQuestion.id}</p>
-          <p className="text-3xl text-[#505050]">{currentQuestion.name.question}</p>
+          <p className="text-xl md:text-3xl text-[#505050]">{currentQuestion.name.question}</p>
           <p className="text-[#A4A4A4] font-semibold">Select only one correct answer</p>
         </div>
         <div className="w-3/12 hidden md:block">
@@ -73,7 +73,7 @@ const Question = ({currentQuestion, setShowImage, setShowImageContent, handleAns
             onClick={() => handleAnswerClick(answer.index)} 
             data-radio={answer.index}
           >
-            <div className="px-12 py-6">
+            <div className="px-2 md:px-12 py-6">
               <div className="flex">
                 <input type="radio" className="w-6 h-6" name="" id="" checked={radio === answer.index} onChange={() => handleAnswerClick(answer.index)} />
                 <p className="text-lg text-[#505050] md:text-xl ml-3">{answer.description}</p>

@@ -9,10 +9,14 @@ export const Success = () => {
   
   const navigate = useNavigate()
 
-  useEffect(() => {
-    setTimeout(() => {console.log("Successfull authentication redirect to test"), 4000})
-    navigate("/test")
-  }, [])
+  useEffect(() => { 
+    const redirectTimer = setTimeout(() => {
+      console.log("Successfull authentication redirect to test");
+      navigate("/test")
+    }, 4000)
+
+    return () => clearTimeout(redirectTimer)
+  }, [navigate])
 
 
   return (

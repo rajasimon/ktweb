@@ -28,7 +28,7 @@ const Timer = ({ handleSubmitAllAnswers }) => {
   }, []); // Empty dependency array to run the effect only once on component mount
 
   return (
-    <p className="text-3xl font-semibold text-sky-700">{formatTime(time)}</p>
+    <p className="text-xl md:text-3xl font-semibold text-sky-700">{formatTime(time)}</p>
   )
 }
 

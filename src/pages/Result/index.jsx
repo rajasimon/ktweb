@@ -7,6 +7,7 @@ import micSVG from "../../assets/images/Mic.svg"
 import videocamSVG from "../../assets/images/video_cam.svg"
 import watchSVG from "../../assets/images/watch.svg"
 import { useAuth } from "../../auth"
+import { Link } from "react-router-dom"
 
 
 const CircleSVG = () => (
@@ -144,6 +145,7 @@ const Result = () => {
             <p className="flex items-center pl-3 text-2xl font-semibold">
               {userName}
             </p>
+            <Link to={"/logout"} className="underline flex items-center ml-4">Logout</Link>
           </div>
           <div><img src="/src/assets/EDC_Icon.png" alt="" /></div>
         </div>

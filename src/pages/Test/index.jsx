@@ -232,7 +232,10 @@ const Test = () => {
         <div className="flex pt-12 justify-between mb-5">
           <div className="flex w-full">
             <img src={avatar} alt="" />
-            <p className="flex items-center pl-3 text-2xl font-semibold">{userName}</p>
+            <div className="flex flex-col md:flex-row">
+              <p className="flex items-center pl-3 text-2xl font-semibold">{userName}</p>
+              <Link to={"/logout"} className="underline flex items-center ml-4">Logout</Link>
+            </div>
           </div>
           <div>
             <img src={edcIcon} alt="" />
@@ -286,14 +289,14 @@ const Test = () => {
           )}
 
           {testMode === "questions" && (
-            <div className="py-6 px-4 md:px-12 bg-[#F5F5F5] rounded-b-2xl flex">
-              <button className="px-4 py-2 w-52 h-10 hover:bg-[#EDF4FD] hover:border-[#025EE1] text-gray-900 border-2 rounded-lg" onClick={handlePreviousClick}>Previous</button>
+            <div className="py-6 px-4 md:px-12 bg-[#F5F5F5] rounded-b-2xl flex flex-col md:flex-row space-y-4 md:space-y-0">
+              <button className="px-4 py-2 w-full md:w-52  h-10 hover:bg-[#EDF4FD] hover:border-[#025EE1] text-gray-900 border-2 rounded-lg" onClick={handlePreviousClick}>Previous</button>
               {showSubmit && (
                 <div className="ml-10"><Button title="Submit All Answers" isLoading={isLoading} onClick={handleSubmitAllAnswers} /></div>
                 )
               }
               {!showSubmit && (
-                 <button className="ml-10 px-4 py-2 w-52 h-10 bg-[#025EE1] hover:bg-[#332A7C] text-white rounded-lg" onClick={handleNextClick}>Next</button>
+                 <button className="md-0 md:ml-10 px-4 py-2 w-full md:w-52 h-10 bg-[#025EE1] hover:bg-[#332A7C] text-white rounded-lg" onClick={handleNextClick}>Next</button>
               )}
               
             </div>
