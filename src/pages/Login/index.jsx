@@ -78,10 +78,12 @@ const Login = () => {
 
   return (
     <div className="flex flex-row h-screen bg-[#F1F1F8]">
-      <div className="items-center justify-center w-3/5 bg-gradient-to-r from-[#025EE1] to-[#171C8F] hidden md:block">
-        <img src={loginImage} alt="" width="633" height="600" />
-        <div className="absolute bottom-0">
-          <p className="text-white py-4">Copyright © 2024 Performise Labs, all rights reserved</p>
+      <div className="w-3/5 bg-gradient-to-r from-[#025EE1] to-[#171C8F] hidden md:block">
+        <div className="flex items-center justify-center h-full">
+          <img src={loginImage} alt="" width="633" height="600" />
+          <div className="absolute bottom-0">
+            <p className="text-white py-4">Copyright © 2024 Performise Labs, all rights reserved</p>
+          </div>
         </div>
       </div>
       <div className="px-6 py-4 md:px-16 md:py-6 flex flex-col items-center w-full md:w-2/5">
