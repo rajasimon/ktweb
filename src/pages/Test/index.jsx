@@ -26,6 +26,7 @@ const Test = () => {
   const [showImage, setShowImage] = useState(false)
   const [showViolation, setShowViolation] = useState(false)
   const [violationCode, setViolationCode] = useState(null)
+  const [violationList, setViolationList] = useState([5008])
   const [showImageContent, setShowImageContent] = useState(false)
   const [testMode, setTestMode] = useState('instructions')
   
@@ -151,8 +152,9 @@ const Test = () => {
     const evidenceCode = event.detail.evidenceCode
 
     if (!isLoading) {
-      if (evidenceCode !== 5008) {
+      if (!violationList.includes(evidenceCode)) {
         setViolationCode(evidenceCode)
+        setViolationList([...violationList, evidenceCode])
         setShowViolation(true)
       }
     }
