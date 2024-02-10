@@ -6,6 +6,7 @@ import screenShareSVG from "../../assets/images/screen_share.svg"
 import micSVG from "../../assets/images/Mic.svg"
 import videocamSVG from "../../assets/images/video_cam.svg"
 import watchSVG from "../../assets/images/watch.svg"
+import Arabic from "../../assets/language.svg"
 import { useAuth } from "../../auth"
 import { Link } from "react-router-dom"
 
@@ -154,7 +155,7 @@ const Result = () => {
             <div className="w-8/12 md:w-3/12">
               <p className="text-gray-400 font-semibold">Switch Language</p>
               <div className="flex flex-row space-x-2">
-                <img src="/src/assets/language.svg" alt="" height="16" width="32" />
+                <img src={Arabic} alt="" height={16} width={32} />
                 <p>Arabic</p>
               </div>
             </div>
