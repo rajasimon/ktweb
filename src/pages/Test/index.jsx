@@ -208,6 +208,13 @@ const Test = () => {
     }
   })
 
+  useEffect(() => {
+    const KTReport = localStorage.getItem("KTReport")
+    if (KTReport) {
+      navigate("/logout")
+    }
+  }, [])
+
   return (
     <div className="bg-[#F1F1F8]" id="testContainerId">
       {showImage && (
