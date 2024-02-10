@@ -207,7 +207,7 @@ const Test = () => {
   })
 
   return (
-    <div className="bg-[#F1F1F8]">
+    <div className="bg-[#F1F1F8]" id="testContainerId">
       {showImage && (
         <div>
           <div className="w-full h-full top-0 bg-[#00000080] backdrop-opacity-30 fixed"></div>
@@ -220,7 +220,7 @@ const Test = () => {
       {showViolation && (
         <div>
           <div className="w-full h-full top-0 bg-[#00000080] backdrop-opacity-30 fixed"></div>
-          <div className="fixed z-50 w-full flex p-16 h-full justify-center items-center" onClick={() => setShowImage(false)}>
+          <div className="fixed z-50 w-full flex p-4 md:p-16 h-full justify-center items-center" onClick={() => setShowImage(false)}>
             <Violation violationCode={violationCode} onAcceptViolation={hanldeViolationAccept} />
           </div>
         </div>

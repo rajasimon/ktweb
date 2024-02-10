@@ -10,7 +10,7 @@ const Violation = ({onAcceptViolation, violationCode}) => {
   let violationMessage = ""
 
   const combinedClassNames = classNames(
-    "flex", "w-4/12", "p-6", "bg-gradient-to-r", gradiantFrom, gradiantTo, "gap-6", "rounded-xl"
+    "flex", "w-full md:w-4/12", "p-6", "bg-gradient-to-r", gradiantFrom, gradiantTo, "gap-6", "rounded-xl"
   )
 
 
@@ -45,17 +45,21 @@ const Violation = ({onAcceptViolation, violationCode}) => {
 
   return (
     <div className={combinedClassNames}>
-      <div>
-        <img src={dangerSVG} alt="" className="w-20" />
-      </div>
       <div className="space-y-2">
-        <h1 className="text-white font-bold text-2xl">VIOLATION ALERT</h1>
-        <p className="text-white text-xl font-bold">{violationMessage}</p>
+        <div className="flex flex-row">
+          <div className="w-1/5">
+            <img src={dangerSVG} alt="" className="w-20" />
+          </div>
+          <div className="w-4/5 px-3">
+            <h1 className="text-white font-bold text-lg md:text-2xl">VIOLATION ALERT</h1>
+            <p className="text-white text-xl font-bold">{violationMessage}</p>
+          </div>
+        </div>
         <p className="text-white text-lg">
           Please ensure you maintain focus on the screen to avoid further alerts. Three alerts will result in a test failure, and you may be banned from the test.
         </p>
         <div>
-          <button className="px-4 py-2 mt-8 bg-white text-gray-700 font-semibold text-sm rounded-lg hover:bg-[#CCCCCC]" onClick={onAcceptViolation}>Acknowledge & Continue</button>
+          <button className="px-4 py-2 mt-8 bg-white w-full md:w-auto text-gray-700 font-semibold text-sm rounded-lg hover:bg-[#CCCCCC]" onClick={onAcceptViolation}>Acknowledge & Continue</button>
         </div>
       </div>
     </div>
