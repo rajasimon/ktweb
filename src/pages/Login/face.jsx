@@ -157,7 +157,7 @@ export const Face = ({ setMode, setName, typeInput }) => {
       <div className="relative flex flex-col items-center p-10 border-2 border-dashed border-[#505050] rounded-lg w-11/12 h-96">
         {!pictureTaken && (
           <div className="w-full h-full overflow-hidden rounded-lg">
-            <video className="w-full h-full object-cover" autoPlay ref={videoRef}></video>
+            <video className="w-full h-full object-cover" autoPlay muted playsinline ref={videoRef}></video>
           </div>
         )}
         {pictureTaken && <img className="rounded-lg w-full h-full object-cover" ref={photoRef} />}
