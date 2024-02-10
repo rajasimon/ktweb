@@ -38,6 +38,7 @@ const Test = () => {
   const [userAnswers, setUserAnswers] = useState({});
   const [showSubmit, setShowSubmit] = useState(false)
   const [examDetail, setExamDetail] = useState()
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleAnswerSelected = (selectedAnswer) => {
     setSelectedAnswerID(selectedAnswer)
@@ -67,24 +68,17 @@ const Test = () => {
   }
 
   const handleSubmitAllAnswers = async () => {
-    apInstance.current.stop()
-    
-    const endStudentExamResp = await endStudentExamAPI(token, examDetail.id, userID)
-    localStorage.setItem('KTReport', JSON.stringify(endStudentExamResp))
+    setIsLoading(true)
+    apInstance.current.stop() 
   }
-
-  window.addEventListener("apMonitoringStopped", async () => {
-      const reportOptions = getReportOptions();
-      apInstance.showReport(reportOptions);
-      document.getElementById("ap-proctoring-container").visibility = "hidden";
-      document.getElementById("ap-test-proctoring-status").innerHTML = "Proctoring stopped";
-  })
 
   const currentQuestion = questionBank[currentQuestionIndex];
 
   const { token, userID, userName } = useAuth()
 
   const setupAutoPrctor = async () => {
+    setIsLoading(true)
+
     const scriptsToLoad = 2;
     let loadedScripts = 0;
 
@@ -155,9 +149,12 @@ const Test = () => {
   const handleAutoProctorEvidenceEvent = (event) => {
     console.log('Event received from auto proctor evidence event', event)
     const evidenceCode = event.detail.evidenceCode
-    if (evidenceCode === 5008) {
-      setViolationCode(evidenceCode)
-      setShowViolation(true)
+
+    if (!isLoading) {
+      if (evidenceCode !== 5008) {
+        setViolationCode(evidenceCode)
+        setShowViolation(true)
+      }
     }
   }
 
@@ -173,11 +170,15 @@ const Test = () => {
     const questionsetups = await questionSetupsAPI(token, examDetail.id)
     setQuestionBank(questionsetups)
     setTestMode("questions")
+    setIsLoading(false)
   }
 
   const handleAutoProctorMonitoringStopped = async () => {
     const getReport = await apInstance.current.getReport()
     localStorage.setItem('AutoProctorReport', JSON.stringify(getReport))
+
+    const endStudentExamResp = await endStudentExamAPI(token, examDetail.id, userID)
+    localStorage.setItem('KTReport', JSON.stringify(endStudentExamResp))
     
     navigate("/result")
   }
@@ -278,7 +279,7 @@ const Test = () => {
 
           {testMode === "instructions" && (
             <div className="py-6 px-4 md:px-12 bg-[#F5F5F5] rounded-b-2xl">
-              <Button title="Confirm and Continue" onClick={() => isAccepted ? setupAutoPrctor() : setShowAcceptButton(true)} />
+              <Button title="Confirm and Continue" isLoading={isLoading} onClick={() => isAccepted ? setupAutoPrctor() : setShowAcceptButton(true)} />
             </div>
           )}
 
@@ -286,7 +287,7 @@ const Test = () => {
             <div className="py-6 px-4 md:px-12 bg-[#F5F5F5] rounded-b-2xl flex">
               <button className="px-4 py-2 w-52 h-10 hover:bg-[#EDF4FD] hover:border-[#025EE1] text-gray-900 border-2 rounded-lg" onClick={handlePreviousClick}>Previous</button>
               {showSubmit && (
-                <button className="ml-10 px-4 py-2 w-52 h-10 bg-[#025EE1] hover:bg-[#332A7C] text-white rounded-lg" onClick={handleSubmitAllAnswers}>Submit All Answers</button>
+                <div className="ml-10"><Button title="Submit All Answers" isLoading={isLoading} onClick={handleSubmitAllAnswers} /></div>
                 )
               }
               {!showSubmit && (
