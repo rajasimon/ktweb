@@ -20,6 +20,7 @@ import { useAuth } from "../../auth"
 import { useNavigate } from "react-router-dom"
 
 const Login = () => {
+  const backendPath = import.meta.env.VITE_BACKEND_PATH
 
   const placeHolder = 'Student ID or traffic file number'
   
@@ -28,14 +29,29 @@ const Login = () => {
   const [name, setName] = useState(null)
   const { token, login, logout } = useAuth()
   const [typeInput, setTypeInput] = useState();
+  const [isLoading, setIsLoading] = useState(false)
   
   const handleInputClick = () => {
-    // input, face, success, fail, link, camera
-    if (typeInput) {
-      if (mode === 'input') {
-        setMode('camera')
+    setIsLoading(true)
+    fetch(`${backendPath}/api/authenticate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({"password": "admin", "username": typeInput})
+    }).then((res) => res.json()).then(response => {
+      if ("id_token" in response) {
+        login(response.id_token, typeInput, "")
+        // input, face, success, fail, link, camera
+        if (mode === 'input') {
+          setMode('camera')
+        }        
+      } else {
+        setMode("fail")
+        console.log("Face matched but the API call failed.")
       }
-    }
+    })
+    
   }
 
   const handleInputOnChange = (event) => {
@@ -58,7 +74,7 @@ const Login = () => {
       <div className="mt-10 mb-20">
         <Alert icon={faceSVG} title="Data Privacy Notice" subtitle="Our system authenticate using facial recognition. By using this system, you acknowledge that all captured data is subject to the EDC privacy policy and terms." />
       </div>
-      <Button title="Confirm and Proceed" isFull={true} onClick={handleInputClick} />
+      <Button title="Confirm and Proceed" isLoading={isLoading} isFull={true} onClick={handleInputClick} />
     </div>
   )
 

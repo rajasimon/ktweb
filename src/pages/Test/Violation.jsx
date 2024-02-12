@@ -47,7 +47,7 @@ const Violation = ({onAcceptViolation, violationCode}) => {
     <div className={combinedClassNames}>
       <div className="space-y-2">
         <div className="flex flex-row">
-          <div className="w-1/5">
+          <div className="w-1/5 md:w-auto">
             <img src={dangerSVG} alt="" className="w-20" />
           </div>
           <div className="w-4/5 px-3">

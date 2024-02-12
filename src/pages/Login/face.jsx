@@ -3,8 +3,6 @@ import { useEffect, useRef, useState } from "react"
 import { useAuth } from "../../auth"
 
 export const Face = ({ setMode, setName, typeInput }) => {
-  const backendPath = import.meta.env.VITE_BACKEND_PATH
-  
   const [pictureTaken, setPictureTaken] = useState(false);
   const [takePicture, setTakePicture] = useState(false) 
   const [timeoutSeconds, setTimeoutSeconds] = useState(null);
@@ -77,8 +75,9 @@ export const Face = ({ setMode, setName, typeInput }) => {
 
             if (identifyName === typeInput) {
               // success
+              login(token, typeInput, name)
               setName(name)
-              await authenticateAPI(name)
+              setMode("success")
             } else {
               setMode("fail")
             }
@@ -88,24 +87,6 @@ export const Face = ({ setMode, setName, typeInput }) => {
         })
       })
   }
-
-  const authenticateAPI = async (name) => (
-    fetch(`${backendPath}/api/authenticate`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({"password": "admin", "username": typeInput})
-    }).then((res) => res.json()).then(response => {
-        if ("id_token" in response) {
-          login(response.id_token, typeInput, name)
-          setMode("success")
-        } else {
-          setMode("fail")
-          console.log("Face matched but the API call failed.")
-        }
-    })
-  )
 
   // Get video feed from the camera and show it to the user
   useEffect(() => {
