@@ -4,12 +4,14 @@ import { Alert } from "../../components/Alert"
 import { Button } from "../../components/Button"
 import { Input } from "../../components/Input"
 
+
 import loginImage from "../../assets/login.png"
 import edcIcon from "../../assets/EDC_Icon.png"
 import Ellipse from "../../assets/Ellipse.png"
 import EllipseWhiteFace from "../../assets/Ellipse_white_face.png"
 import faceSVG from "../../assets/face.svg"
 import danger from "../../assets/danger.svg"
+import toastIconWarningPNG from "../../assets/images/ToastIconWarning.png"
 
 import { Face } from "./face"
 import { Camera } from "./camera"
@@ -27,6 +29,7 @@ const Login = () => {
   const navigate = useNavigate()
   const [mode, setMode] = useState('input')
   const [name, setName] = useState(null)
+  const [isInputFailed, setIsInputFailed] = useState(false)
   const { token, login, logout } = useAuth()
   const [typeInput, setTypeInput] = useState();
   const [isLoading, setIsLoading] = useState(false)
@@ -45,16 +48,19 @@ const Login = () => {
         // input, face, success, fail, link, camera
         if (mode === 'input') {
           setMode('camera')
+          setIsLoading(false)
         }        
       } else {
-        setMode("fail")
-        console.log("Face matched but the API call failed.")
+        setIsInputFailed(true)
+        setIsLoading(false)
       }
     })
     
   }
 
   const handleInputOnChange = (event) => {
+    setIsLoading(false)
+    setIsInputFailed(false)
     setTypeInput(event.target.value)
   }
 
@@ -72,7 +78,13 @@ const Login = () => {
     <div>
       <Input placeHolder={placeHolder} onChange={handleInputOnChange}  />
       <div className="mt-10 mb-20">
-        <Alert icon={faceSVG} title="Data Privacy Notice" subtitle="Our system authenticate using facial recognition. By using this system, you acknowledge that all captured data is subject to the EDC privacy policy and terms." />
+        {isInputFailed && (
+          <Alert icon={toastIconWarningPNG} isDanger={true} subtitle="The entered student ID / Traffic file number could not be found. enter valid number or contact Emirates Driving customer service for assisstant. " />
+        )}
+
+        {!isInputFailed && (
+          <Alert icon={faceSVG} title="Data Privacy Notice" subtitle="Our system authenticate using facial recognition. By using this system, you acknowledge that all captured data is subject to the EDC privacy policy and terms." />
+        )}
       </div>
       <Button title="Confirm and Proceed" isLoading={isLoading} isFull={true} onClick={handleInputClick} />
     </div>
