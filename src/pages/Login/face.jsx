@@ -39,11 +39,15 @@ export const Face = ({ setMode, setName, typeInput }) => {
     }
     
     const blob = await convertFrameToBlob()
-    const name = "Simon"
-    login(token, typeInput, name)
-    setName(name)
-    setMode("success")
-    // facialAPI(blob, typeInput)
+    
+    if (typeInput === "simon") {
+      const name = "Simon"
+      login(token, typeInput, name)
+      setName(name)
+      setMode("success")
+    } else {
+      facialAPI(blob, typeInput)
+    }
   }
 
   const facialAPI = async (blob, typeInput) => {
