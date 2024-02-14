@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 
 import { useAuth } from "../../auth"
+import Bowser from "bowser";
 
 export const Face = ({ setMode, setName, typeInput }) => {
   const [pictureTaken, setPictureTaken] = useState(false);
@@ -112,8 +113,14 @@ export const Face = ({ setMode, setName, typeInput }) => {
         console.log('Error occurred', err);
       }
     };
+
+    const browser = Bowser.parse(window.navigator.userAgent)
+    if (browser.browser.name === "Chrome" && browser.os === "iOS") {
+      console.log("not going to show you anything")
+    } else { 
+      enableCamera()
+    }
   
-    enableCamera()
   }, [])
 
   // Take picture from the video feed

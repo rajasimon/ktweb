@@ -20,6 +20,7 @@ import { Fail } from "./fail"
 
 import { useAuth } from "../../auth"
 import { useNavigate } from "react-router-dom"
+import Bowser from "bowser"
 
 const Login = () => {
   const backendPath = import.meta.env.VITE_BACKEND_PATH
@@ -27,7 +28,7 @@ const Login = () => {
   const placeHolder = 'Student ID or traffic file number'
   
   const navigate = useNavigate()
-  const [mode, setMode] = useState('input')
+  const [mode, setMode] = useState('')
   const [name, setName] = useState(null)
   const [isInputFailed, setIsInputFailed] = useState(false)
   const { token, login, logout } = useAuth()
@@ -65,14 +66,33 @@ const Login = () => {
   }
 
   useEffect(() => {
-    navigator.permissions.query({ name: "camera" }).then(res => {
-      if(res.state == "granted"){
-        console.log("Permission to access camera is granted")
-      } else {
-        console.log("Permission to access camera not given")
-      }
-    });
-  })
+    const browser = Bowser.parse(window.navigator.userAgent)
+    console.log(browser)
+    if (browser.browser.name === "Safari") {
+      setMode("combaitable")
+    } else {
+      setMode("input")
+    }
+  }, [])
+
+  // useEffect(() => {
+  //   navigator.permissions.query({ name: "camera" }).then(res => {
+  //     if(res.state == "granted"){
+  //       console.log("Permission to access camera is granted")
+  //     } else {
+  //       console.log("Permission to access camera not given")
+  //     }
+  //   });
+  // }, [])
+
+
+  const combaitableMode = (
+    <div>
+      <div className="mt-10 mb-20">
+        <Alert icon={toastIconWarningPNG} isDanger={true} title="Unsupported Device" subtitle="The system is optimized for desktops or laptops with a microphone and camera, in line with governance and compliance policies and requirements. Please use access the system from sa supported device to run the test." />
+      </div>
+    </div>
+  )
 
   const inputMode = (
     <div>
@@ -122,6 +142,7 @@ const Login = () => {
           <p className="text-[#505050] text-xl md:text-2xl">Welcome to</p>
           <p className="text-[#505050] text-2xl md:text-4xl"><span className="font-bold">O</span>nline <span className="font-bold">K</span>nowledge <span className="font-bold">T</span>est</p>
         </div>
+        {mode === "combaitable" && combaitableMode}
         {mode === "input" && inputMode}
         {mode === "face" && faceMode}
         {mode === "success" && successMode}

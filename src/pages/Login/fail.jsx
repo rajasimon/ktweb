@@ -3,12 +3,15 @@ import { Alert } from "../../components/Alert"
 import { Button } from "../../components/Button"
 import danger from "../../assets/danger.svg"
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "../../auth"
 
 
 export const Fail = () => {
   const navigate = useNavigate()
+  const { logout } = useAuth()
   
   const handleFailClick = () => {
+    logout()
     navigate("/")
   }
 
