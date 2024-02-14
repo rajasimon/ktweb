@@ -68,7 +68,7 @@ const Login = () => {
   useEffect(() => {
     const browser = Bowser.parse(window.navigator.userAgent)
     console.log(browser)
-    if (browser.browser.name === "Safari") {
+    if (browser.browser.name === "Safari" || browser.platform.type === "mobile") {
       setMode("combaitable")
     } else {
       setMode("input")

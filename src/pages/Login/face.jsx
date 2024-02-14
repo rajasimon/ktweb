@@ -113,14 +113,8 @@ export const Face = ({ setMode, setName, typeInput }) => {
         console.log('Error occurred', err);
       }
     };
-
-    const browser = Bowser.parse(window.navigator.userAgent)
-    if (browser.browser.name === "Chrome" && browser.os === "iOS") {
-      console.log("not going to show you anything")
-    } else { 
-      enableCamera()
-    }
-  
+    
+    enableCamera()
   }, [])
 
   // Take picture from the video feed
