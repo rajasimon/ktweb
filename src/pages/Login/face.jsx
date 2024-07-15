@@ -81,7 +81,7 @@ export const Face = ({ setMode, setName, typeInput }) => {
 
             const splittedEmail = email.split("@")
             const identifyName = splittedEmail[0]
-
+            console.log(identifyName, splittedEmail);
             if (identifyName === typeInput) {
               // success
               login(token, typeInput, name)
