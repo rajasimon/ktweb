@@ -48,7 +48,7 @@ const Login = () => {
         login(response.id_token, typeInput, "")
         // input, face, success, fail, link, camera
         if (mode === 'input') {
-          setMode('camera')
+          setMode('success')
           setIsLoading(false)
         }        
       } else {
