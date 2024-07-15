@@ -97,8 +97,8 @@ const Result = () => {
     let tabCount = 0
     let faceCount = 0
     let totalCount = 0
-    if (autoProctorReport.reportData.all_evidences.length > 0) {
-      autoProctorReport.reportData.all_evidences.forEach(evidenceReport => {
+    if (autoProctorReport.reportData.evidences.length > 0) {
+      autoProctorReport.reportData.evidences.forEach(evidenceReport => {
         
         if (!Array.isArray(evidenceReport)) {
           console.log(evidenceReport)
